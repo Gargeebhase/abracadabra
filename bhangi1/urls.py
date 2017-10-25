@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-
+from gad1 import views
+from django.core.urlresolvers import reverse_lazy
 urlpatterns = [
     url(r'^gad1/', include('gad1.urls')),
     url(r'^admin/',admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
+    # garegeeaish
+    url(r'^accounts/',include('django.contrib.auth.urls')),
+    url(r'^accounts/registration/', views.registration, name='registration'),
+    url(r'^chatterbot/', include('chatterbot.ext.django_chatterbot.urls', namespace='chatterbot')),
+
 ]
+#success_url = reverse_lazy('/gad1/page1'),

@@ -2,6 +2,30 @@ from django.shortcuts import get_object_or_404, render ,render_to_response
 from gad1.forms import StudentForm,ProfessorForm,StudentLoginForm,ProfessorLoginForm
 from gad1.models import FileDb
 from django.core.files import File
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+
+
+def registration(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            from django.contrib.auth import authenticate, login
+            user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
+            login(request, user)
+            return HttpResponseRedirect(reverse('page1'))
+    else:
+        form = UserCreationForm()
+        
+    # return render_to_response('registration.html', {
+    #     'form': form,
+    #     }, context_instance=RequestContext(request))
+    return render(request,'registration.html' ,{'form':form})
 def page1(request):
    # question = get_object_or_404(Question, pk=question_id)
     return render(request, 'gad1/page1.html')
@@ -35,8 +59,8 @@ def page4(request):
 	form=ProfessorForm()
 	return render(request,'gad1/page4.html',{'form':form})
 
-# def page23(request):
-# 	return render(request, 'gad1/page5.html')
+#def page23(request):
+#	return render(request, 'gad1/page23.html')
 
 def page5(request):
 	if request.POST :
@@ -49,7 +73,7 @@ def page6(request):
 	if request.POST :
 		form = StudentForm(request.POST)
 		if form.is_valid():
-			prof = form.save()
+			student = form.save()
 	return render(request, 'gad1/page6.html')
 
 def page7(request):
@@ -75,6 +99,17 @@ def page8(request):
    # question = get_object_or_404(Question, pk=question_id)
     return render(request, 'gad1/page8.html')
 
+def page9(request):
+   # question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'gad1/page9.html')
+
+def yp(request):
+   # question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'gad1/page1.html')
+#def login1(request):
+   # question = get_object_or_404(Question, pk=question_id)
+    #return render(request, 'registration/login.html')
+
 
 def page10(request):
    # question = get_object_or_404(Question, pk=question_id)
@@ -87,15 +122,19 @@ def updatefile(request):
        #f = open(file.docfile.path,'w+b')
        import time
        timestr = time.strftime("%Y%m%d-%H%M%S")
-       timest = 'C:\\Users\Gargee Bhase\pana\\' + timestr
+       #timest = 'C:\\Users\Gargee Bhase\pana\\' + timestr
+       timest = 'C:\\Users\Gargee Bhase\pana\\abcd'
+
        fi=open(timest,'w+')
        f = File(fi)
        content = request.POST['text1']
+       #abcde = tinymce.dom.getContent({format : 'text'});
        f.write(content)
        #file.docfile = File(f)
        #file.save()
        #return HttpResponseRedirect('/home/')
-       return render(request, 'gad1/page10.html')
+       #abcde = selection.getContent({format : 'text'});
+       return render(request, 'gad1/page6.html')
 
     else:
        docfile = file.docfile.read()
@@ -103,13 +142,66 @@ def updatefile(request):
        return render_to_response('gad1/updatefile.html',{'file':file,  'docfile' :
                    docfile}, context_instance=RequestContext(request))
 
+def updatefile2(request):
+    #file = UploadedFile.objects.get(pk=id)
+    if request.method == "POST":
+       #from django.core.files import File
+       #f = open(file.docfile.path,'w+b')
+       import time
+       timestr = time.strftime("%Y%m%d-%H%M%S")
+       #timest = 'C:\\Users\Gargee Bhase\pana\\' + timestr
+       timest = 'C:\\Users\Gargee Bhase\pana\\abcdef'
+
+       fi=open(timest,'w+')
+       f = File(fi)
+       content = request.POST['text1']
+       #abcde = tinymce.dom.getContent({format : 'text'});
+       f.write(content)
+       #file.docfile = File(f)
+       #file.save()
+       #return HttpResponseRedirect('/home/')
+       #abcde = selection.getContent({format : 'text'});
+       return render(request, 'gad1/page5.html')
+
+    else:
+       docfile = file.docfile.read()
+
+       return render_to_response('gad1/updatefile.html',{'file':file,  'docfile' :
+                   docfile}, context_instance=RequestContext(request))
 
 def page18(request):
-	du = open('C:\\Users\Gargee Bhase\pana\\bc','r')
+	du = open('C:\\Users\Gargee Bhase\pana\\abcd','r')
 	o = File(du)
 	context = {}
 	context["uploadedFile"]=o.read()
 	return render_to_response('gad1/page18.html',context)
+
+def page19(request):
+	du = open('C:\\Users\Gargee Bhase\pana\\abcdef','r')
+	o = File(du)
+	context = {}
+	context["uploadedFile"]=o.read()
+	return render_to_response('gad1/page19.html',context)
+
+def pagechat(request):
+	return render(request, 'gad1/pagechat.html')
+# def pagechat(request):
+# 	chatbot = ChatBot("Ron Obvious")
+# 	conversation = [
+#     "Hello",
+#     "Hi there!",
+#     "How are you doing?",
+#     "I'm doing great.",
+#     "That is good to hear",
+#     "Thank you.",
+#     "You're welcome."
+# ]
+
+# chatbot.set_trainer(ListTrainer)
+# chatbot.train(conversation)
+# response = chatbot.get_response("Good morning!")
+# print(response)
+
 
 #, id
 

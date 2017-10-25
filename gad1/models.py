@@ -15,7 +15,7 @@ class Student(models.Model):
 	sap = models.CharField(primary_key=True,max_length=20)
 	email = models.CharField(max_length=20)
 	password = models.CharField(max_length=20)
-
+	stat = models.BooleanField() 
 # class StudentForm(ModelForm):
 # 	class Meta:
 # 		model = Student

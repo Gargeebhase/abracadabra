@@ -4,19 +4,19 @@
 {% load static %}
 <html>
 <head>
-  <!--<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-  <script>tinymce.init({ selector:'textarea' });</script>-->
+  <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+  <script>tinymce.init({ selector:'textarea' });</script>
 
   <!--Tinymce Text-Editor (Must be in Head Tag) -->
-  <script src="{% static 'gad1/js/tinymce/tinymce.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'gad1/js/tinymce/custom.js' %}" ></script>
+  <!--<script src="{% static 'gad1/js/tinymce/tinymce.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'gad1/js/tinymce/custom.js' %}" ></script>-->
 </head>
 
 
 <body>
  <form action="./updatefile" method="post" enctype="multipart/form-data"> 
  {% csrf_token %}
-<textarea class="tinymce" name="text1">
+<textarea class="tinymce" name="text1" id="txt">
 <div align="middle">D. J. Sanghvi College of Engineering
 </div>
 </textarea>

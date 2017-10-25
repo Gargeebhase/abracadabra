@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+#BASE_DIR = os.path.join(os.path.dirname(__file__),os.path.pardir)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tinymce'
+    'tinymce',
+    'chatterbot.ext.django_chatterbot',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,8 @@ MEDIA_ROOT ='C:\\Users\Gargee Bhase\pana'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./TEMPLATES',],
+        #'./TEMPLATES',
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,7 +75,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bhangi1.wsgi.application'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+LOGIN_REDIRECT_URL= '/gad1/page1'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -131,3 +135,24 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
+
+EMAIL_HOST      = 'my-domain.com'
+EMAIL_HOST_PASSWORD = 'my cpanel password'
+EMAIL_HOST_USER = 'my cpanel user'
+EMAIL_PORT      = 25
+EMAIL_USE_TLS   = False
+DEFAULT_FROM_EMAIL  = 'gbhase2@gmail.com'
+SERVER_EMAIL    = 'gbhase2@gmail.com'
+
+CHATTERBOT = {
+    'name': 'Tech Support Bot',
+    'logic_adapters': [
+        'chatterbot.logic.MathematicalEvaluation',
+        'chatterbot.logic.TimeLogicAdapter',
+        'chatterbot.logic.BestMatch'
+    ],
+    'trainer': 'chatterbot.trainers.ChatterBotCorpusTrainer',
+    'training_data': [
+         'chatterbot.corpus.english.greetings'
+    ]
+}
