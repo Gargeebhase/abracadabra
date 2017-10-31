@@ -23,7 +23,8 @@
  
  <!--{{file.id}}/-->
     
-    {{ form.as_p }}
+    {{ form.as_p|safe }}
+    <!--{{ content|safe }}-->
 <p><input type="submit" value="Enregistrer"/></p>
     
 </form>

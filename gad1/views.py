@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render ,render_to_response
 from gad1.forms import StudentForm,ProfessorForm,StudentLoginForm,ProfessorLoginForm
-from gad1.models import FileDb
+from gad1.models import FileDb,Professor,Student
 from django.core.files import File
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -62,19 +62,62 @@ def page4(request):
 #def page23(request):
 #	return render(request, 'gad1/page23.html')
 
-def page5(request):
+def page6(request):
 	if request.POST :
 		form = ProfessorForm(request.POST)
 		if form.is_valid():
 			prof = form.save()
-	return render(request, 'gad1/page5.html')
+	return render(request, 'gad1/page6.html')
 
-def page6(request):
+def page61(request):
+	if request.method == 'POST':
+		form = ProfessorLoginForm(request.POST)
+		if form.is_valid():
+			#user = form.save()
+			# from django.contrib.auth import authenticate, login
+			# user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
+			# login(request, user)
+			try:
+				
+				a1 = Professor.objects.get(pro_name=form.cleaned_data.get('pro_name'),password=form.cleaned_data.get('password'))
+				#print(a)
+				if  not a1:
+					return HttpResponseRedirect(reverse('page1'))
+				return render(request, 'gad1/page6.html')
+			except Professor.DoesNotExist:
+				return HttpResponseRedirect(reverse('page1'))##
+		else:
+			form = UserCreationForm()
+			return render(request, 'gad1/page1.html')
+
+
+def page51(request):
+	if request.method == 'POST':
+		form = StudentLoginForm(request.POST)
+		if form.is_valid():
+			#user = form.save()
+			# from django.contrib.auth import authenticate, login
+			# user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
+			# login(request, user)
+			try:
+				
+				a2 = Student.objects.get(student_name=form.cleaned_data.get('student_name'),password=form.cleaned_data.get('password'))
+				#print(a)
+				if  not a2:
+					return HttpResponseRedirect(reverse('page1'))
+				return render(request, 'gad1/page5.html')
+			except Student.DoesNotExist:
+				return HttpResponseRedirect(reverse('page1'))##
+		else:
+			form = UserCreationForm()
+			return render(request, 'gad1/page1.html')
+
+def page5(request):
 	if request.POST :
 		form = StudentForm(request.POST)
 		if form.is_valid():
 			student = form.save()
-	return render(request, 'gad1/page6.html')
+	return render(request, 'gad1/page5.html')
 
 def page7(request):
 	file = FileDb.objects.get()
@@ -143,31 +186,24 @@ def updatefile(request):
                    docfile}, context_instance=RequestContext(request))
 
 def updatefile2(request):
-    #file = UploadedFile.objects.get(pk=id)
-    if request.method == "POST":
-       #from django.core.files import File
-       #f = open(file.docfile.path,'w+b')
-       import time
-       timestr = time.strftime("%Y%m%d-%H%M%S")
-       #timest = 'C:\\Users\Gargee Bhase\pana\\' + timestr
-       timest = 'C:\\Users\Gargee Bhase\pana\\abcdef'
+	if request.method == "POST":
+		if request.POST.get('numero', False):
+			m = request.POST['numero']
+			import time
+			timestr = time.strftime("%Y%m%d-%H%M%S")
+			#timest = 'C:\\Users\Gargee Bhase\pana\\' + timestr
+			timest = 'C:\\Users\Gargee Bhase\pana\\' + m
+			fi=open(timest,'w+')
+			f = File(fi)
+			content = request.POST['text1']
+			f.write(content)
+			return render(request, 'gad1/page5.html')
 
-       fi=open(timest,'w+')
-       f = File(fi)
-       content = request.POST['text1']
-       #abcde = tinymce.dom.getContent({format : 'text'});
-       f.write(content)
-       #file.docfile = File(f)
-       #file.save()
-       #return HttpResponseRedirect('/home/')
-       #abcde = selection.getContent({format : 'text'});
-       return render(request, 'gad1/page5.html')
+	else:
+		docfile = file.docfile.read()
 
-    else:
-       docfile = file.docfile.read()
-
-       return render_to_response('gad1/updatefile.html',{'file':file,  'docfile' :
-                   docfile}, context_instance=RequestContext(request))
+		return render_to_response('gad1/updatefile.html',{'file':file,  'docfile' :
+		                   docfile}, context_instance=RequestContext(request))
 
 def page18(request):
 	du = open('C:\\Users\Gargee Bhase\pana\\abcd','r')
@@ -177,14 +213,24 @@ def page18(request):
 	return render_to_response('gad1/page18.html',context)
 
 def page19(request):
-	du = open('C:\\Users\Gargee Bhase\pana\\abcdef','r')
-	o = File(du)
-	context = {}
-	context["uploadedFile"]=o.read()
-	return render_to_response('gad1/page19.html',context)
+	#if request.method == 'POST':
+		#if request.POST.get('magic', False):
+			#m = request.POST['magic']
+			your_parameter = request.GET['parameter']
+			durr = 'C:\\Users\Gargee Bhase\pana\\' + your_parameter
+			du = open(durr,'r')
+			o = File(du)
+			context = {}
+			context["uploadedFile"]=o.read()
+			if context == {}:
+				context ="Assignment not submitted"
+			return render_to_response('gad1/page19.html',context)
 
 def pagechat(request):
 	return render(request, 'gad1/pagechat.html')
+
+def teach2(request):
+	return render(request, 'gad1/teach2.html')
 # def pagechat(request):
 # 	chatbot = ChatBot("Ron Obvious")
 # 	conversation = [
@@ -219,3 +265,12 @@ def pagechat(request):
 #     with open('C:/gargee_june/form1a.txt', 'wb+') as destination:
 #         for chunk in f.chunks():
 #             destination.write(chunk)
+
+
+
+#updatefile2
+#file = UploadedFile.objects.get(pk=id)
+#from django.core.files import File
+       #f = open(file.docfile.path,'w+b')
+       #abcde = tinymce.dom.getContent({format : 'text'});
+

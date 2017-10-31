@@ -1,5 +1,7 @@
 tinymce.init({
   selector: 'textarea',
+  forced_root_blocked: false,
+  encoding: 'false',
   height: 500,
   menubar: false,
   plugins: [
